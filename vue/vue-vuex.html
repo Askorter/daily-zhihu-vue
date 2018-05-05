@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <style>
+        #app {
+            margin: auto;
+            margin-top: 50px;
+            width: 200px;
+        }
+        
+        .keyitem {
+            width: 25%;
+            box-sizing: border-box;
+            float: left;
+            border: 1px solid #efefef;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background-color: #f7f7f7;
+            user-select: none;
+        }
+        
+        .keyitem:nth-child(1) {
+            color: #FF0000;
+        }
+        
+        .keyitem:nth-child(16) {
+            background-color: #FF6600;
+        }
+        
+        .keyitem:nth-child(16):active {
+            background-color: rgb(221, 88, 0);
+        }
+        
+        .keyitem:hover {
+            cursor: pointer;
+        }
+        
+        .keyitem:active {
+            background-color: #FF9966;
+        }
+        
+        .key {
+            box-sizing: border-box;
+            width: 200px;
+        }
+        
+        .result {
+            width: 200px;
+            height: 50px;
+            padding-top: 10px;
+            background-color: #efefef;
+            font-size: 2.5em;
+            user-select: none;
+        }
+        
+        .enter {
+            width: 200px;
+            height: 25px;
+            background-color: #efefef;
+            padding: 5px 0;
+            color: #5e5e5e;
+            user-select: none;
+        }
+        
+        .result,
+        .enter {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        span {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+        
+        .result span {
+            right: 7px;
+            bottom: 0;
+        }
+    </style>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="result"><span>{{result}}</span></div>
+        <div class="enter"><span>{{enter===""?0:enter}}</span></div>
+        <div class="key">
+            <div class="list">
+                <keyboard v-for="item in keys" :value="item"></keyboard>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuex"></script>
+    <script>
+        const store = new Vuex.Store({
+            state: {
+                result: "",
+                enter: "",
+                cal: ""
+            },
+            mutations: {
+                calcucate(state, value) {
+                    if (value == "=") {
+                        state.result = eval(state.cal);
+                        if (state.result > 99999999) {
+                            alert("the number is too big!");
+                            state.result = 0;
+                            state.enter = "";
+                            state.cal = "";
+                        }
+                        state.enter = state.enter + value;
+                        state.cal = state.result;
+                    } else if (value == "clear") {
+                        state.result = "";
+                        state.enter = "";
+                        state.cal = "";
+                    } else {
+                        state.enter = state.enter + value;
+                        state.cal = state.cal + value;
+                    }
+                }
+            }
+        })
+        Vue.component('keyboard', {
+            props: ['value'],
+            template: `<div :data-value="value" @click="getkeyboardvalue" class="keyitem">
+                {{value}}
+            </div>`,
+            methods: {
+                getkeyboardvalue(event) {
+                    let value = event.target.dataset.value;
+                    this.$store.commit('calcucate', value);
+                }
+            }
+        });
+        var app = new Vue({
+            el: "#app",
+            "store": store,
+            data: {
+                keys: [
+                    "clear", "+", "-", "*",
+                    "7", "8", "9", "0",
+                    "4", "5", "6", "/",
+                    "1", "2", "3", "=",
+                ]
+            },
+            computed: {
+                result() {
+                    return this.$store.state.result;
+                },
+                enter() {
+                    return this.$store.state.enter;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
