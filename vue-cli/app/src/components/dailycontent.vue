@@ -1,29 +1,49 @@
 <template>
     <div class="content">
-        <Card class="cardcontent" :title="cardtitle">
-            <p>{{cardcontent}}</p>
-        </Card>
-        <Card class="cardcontent" :title="cardtitle">
-            <p>{{cardcontent}}</p>
-        </Card>
-        <Card class="cardcontent" :title="cardtitle">
-            <p>{{cardcontent}}</p>
-        </Card>
-        <Card class="cardcontent" :title="cardtitle">
-            <p>{{cardcontent}}</p>
-        </Card>
-        <Card class="cardcontent" >
-            <p>{{cardcontent}}</p>
+        <Card class="cardcontent" v-for="(item,index) in count" :key="index">
+            <p :id="'pp'+index"></p>   
+            <img :id="'ii'+index">    
+            <!-- 通过拼接id来改内容，实在是不得已而为之        -->
+            <!-- 因为刷新后可能因异步无法获取到data，无法数据驱动视图更新 ！！！-->
         </Card>
     </div> 
 </template>
 <script>
+    import axios from 'axios'
     export default {
         name: "dailycontent",
         data() {
             return {
-                cardcontent: "绝地求生的地图没有高清的，找了个刺激战场的。我们从这几个因素考虑：1、 自身因素【 学区房、 市中心、 交通因素、 医院； 以及建筑本身属性， 例如别墅与小区】2、 人口【 需求也决定价格， 人口密集， 城市大价格高】4、 经济因素5、 社会因素【 治安等】 "
+                title: [],
+                imgurl: [],
+                count: 10,
             }
+        },
+        methods: {
+            getcontent(i) {
+                return this.title[i];
+            },
+            getimgurl(i) {
+                return this.imgurl[i];
+            }
+        },
+        //跨域代理没有用，为什么！！！！！！
+        beforeCreate: function() { //在 then的内部不能使用Vue的实例化的this, 因为在内部 this 没有被绑定!!使用箭头函数可以和父方法共享变量
+            axios('https://zhihu-daily.leanapp.cn/api/v1/last-stories').then(response => {
+                if (this.$store.state.hadres == false) {
+                    for (let i = 0; i < this.count; i++) {
+                        this.title[i] = response.data.STORIES.stories[i].title;
+                        this.imgurl[i] = response.data.STORIES.stories[i].images;
+                        this.imgurl[i] = this.imgurl[i].join('').replace(/https:\/\//g, 'https://images.weserv.nl/?url='); //hahahahahahahahahhahahah，api图片有限制，会报403
+                        document.getElementById('pp' + i).innerHTML = this.title[i];
+                        document.getElementById('ii' + i).src = this.imgurl[i];
+                    }
+                    this.$store.state.hadres = true;
+                }
+                console.log(this.$store.state.hadres);
+            }).catch(response => {
+                console.log(response);
+            })
         }
     }
 </script>

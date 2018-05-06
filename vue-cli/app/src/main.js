@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 import App from './App'
 import router from './router'
 import iView from 'iview';
@@ -15,7 +16,8 @@ Vue.use(Vuex)
 /* eslint-disable no-new */
 const store = new Vuex.Store({
     state: {
-        sidepop: false
+        sidepop: false,
+        hadres: false
     },
     mutations: {
         popside(state) {
