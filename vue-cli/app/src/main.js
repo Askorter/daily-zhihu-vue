@@ -34,7 +34,9 @@ const store = new Vuex.Store({
             "体育日报": "8"
         },
         titles: [],
-        imgurls: []
+        imgurls: [],
+        articleid: [],
+        articleshow: ""
     },
     mutations: {
         popside(state) {
@@ -48,9 +50,11 @@ const store = new Vuex.Store({
                 axios('https://zhihu-daily.leanapp.cn/api/v1/last-stories').then(response => {
                     state.titles = [];
                     state.imgurls = [];
+                    state.articleid = [];
                     for (let i = 0; i < 10; i++) {
                         state.titles.push(response.data.STORIES.stories[i].title);
                         state.imgurls.push(response.data.STORIES.stories[i].images.join('').replace(/(http)s?:\/\//g, 'https://images.weserv.nl/?url=')); //匹配http或https
+                        state.articleid.push(response.data.STORIES.stories[i].id);
                     }
                 }).catch(response => {
                     console.log(response);
@@ -60,8 +64,10 @@ const store = new Vuex.Store({
                 axios(url + state.theme[state.sidebaractivated]).then(response => {
                     state.titles = [];
                     state.imgurls = [];
+                    state.articleid = [];
                     for (let i = 1; i < 11; i++) {
                         state.titles.push(response.data.THEMEDES.stories[i].title);
+                        state.articleid.push(response.data.THEMEDES.stories[i].id);
                         if (response.data.THEMEDES.stories[i].images != undefined) {
                             state.imgurls.push(response.data.THEMEDES.stories[i].images.join('').replace(/(http)s?:\/\//g, 'https://images.weserv.nl/?url='));
                         } else {
@@ -73,6 +79,11 @@ const store = new Vuex.Store({
                 })
             }
 
+        },
+        setarticle(state, id) {
+            state.articleshow = id;
+            console.log(id)
+            return
         }
     }
 })

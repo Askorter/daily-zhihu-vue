@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <Card class="cardcontent" v-for="(item,index) in count" :key="index">
+        <Card class="cardcontent" v-for="(item,index) in count" :key="index"  @click.native="showarticle(getid(index))">
             <p v-html="gettitle(index)"></p>   
             <img :src="getimgurl(index)">    
             <!-- 通过拼接id来改内容，实在是不得已而为之-->
@@ -23,6 +23,19 @@
             },
             getimgurl(i) {
                 return this.$store.state.imgurls[i];
+            },
+            getid(i) {
+                return this.$store.state.articleid[i];
+            },
+            showarticle(id) {
+                this.$router.push({
+                        name: 'dailyzhihuarticle',
+                        params: {
+                            aid: id
+                        }
+                    })
+                    //this.$store.commit('setarticle', id);
+                    //window.location.href = '/article';
             }
         },
         //跨域代理没有用，为什么！！！！！！

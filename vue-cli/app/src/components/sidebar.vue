@@ -33,7 +33,6 @@
             activatedname(name) {
                 this.$store.commit('changesider', name);
                 this.$store.commit('getthemecontent');
-
             }
         }
     }
