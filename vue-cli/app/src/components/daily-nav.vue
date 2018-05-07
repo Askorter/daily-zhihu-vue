@@ -9,6 +9,7 @@
         methods: {
             popsidebar() {
                 this.$store.commit('popside');
+                document.body.style.position = "fixed"; //侧边栏弹出时禁止body滚动，解决移动端滑动穿透问题
             }
         }
     }

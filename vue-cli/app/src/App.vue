@@ -19,4 +19,15 @@
         color: #2c3e50;
         margin-top: 60px;
     }
+    
+    body {
+        width: 100%;
+        height: 100%;
+    }
+    
+    html {
+        height: 100%;
+        overflow-y: scroll;
+        /*滚动条消失页面不跳动*/
+    }
 </style>
