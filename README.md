@@ -1,5 +1,5 @@
-#开个坑先
+#持续挖坑
 
-准备技术栈
-vue2.0+vue-router+vuex+axios+vue-cli+webpack
+技术栈
+vue2.0+vue-router+vuex+axios+vue-cli
 UI库：iview
