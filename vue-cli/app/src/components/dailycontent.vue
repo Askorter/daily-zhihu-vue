@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div class="content" v-if="!this.$store.state.isloading">
         <Card class="cardcontent" v-for="(item,index) in count" :key="index"  @click.native="showarticle(getid(index))">
             <p v-html="gettitle(index)"></p>   
             <img :src="getimgurl(index)">    
@@ -28,13 +28,10 @@
                 return this.$store.state.articleid[i];
             },
             showarticle(id) {
+                this.$store.commit('setarticle', id);
                 this.$router.push({
-                        name: 'dailyzhihuarticle',
-                        params: {
-                            aid: id
-                        }
+                        path: 'article',
                     })
-                    //this.$store.commit('setarticle', id);
                     //window.location.href = '/article';
             }
         },
@@ -63,13 +60,24 @@
         }
     }
 </script>
-<style>
+<style scoped>
     .content {
         margin: auto;
-        width: 60%;
+        width: 80%;
     }
     
     .cardcontent {
         margin-top: 20px;
+    }
+    
+    img {
+        width: 100px;
+    }
+    
+    @media screen and (min-width: 765px) {
+        .content {
+            width: 60%;
+            margin: auto;
+        }
     }
 </style>

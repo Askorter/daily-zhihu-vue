@@ -1,5 +1,5 @@
 <template>
-    <div v-html="acontent"></div>
+    <div class="articlec" v-html="acontent" v-if="!this.$store.state.isloading"></div>
 </template>
 <script>
     import axios from 'axios'
@@ -12,7 +12,7 @@
         },
         created: function() {
             var aurl = 'https://zhihu-daily.leanapp.cn/api/v1/contents/';
-            axios(aurl + this.$route.params.aid).then(response => {
+            axios(aurl + this.$store.state.articleshow).then(response => {
                 this.acontent = response.data.CONTENTS.body.replace(/(src="http)s?:\/\//g, 'src="https://images.weserv.nl/?url=');
                 console.log(this.acontent);
             }).catch(response => {
@@ -25,7 +25,8 @@
     }
 </script>
 <style>
-    img {
+    .content-img,
+    .origin_image {
         width: 100%;
         height: auto;
         max-width: 100%;
@@ -35,5 +36,25 @@
     .avatar {
         max-width: 50px;
         margin: auto;
+    }
+    
+    .meta {
+        text-align: center;
+    }
+    
+    .articlec {
+        width: 80%;
+        margin: auto;
+        padding: 20px;
+        text-align: left;
+    }
+    
+    .question-title {
+        text-align: center;
+    }
+    
+    .headline-title,
+    .onlyheading {
+        text-align: center;
     }
 </style>

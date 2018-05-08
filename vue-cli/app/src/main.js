@@ -36,7 +36,8 @@ const store = new Vuex.Store({
         titles: [],
         imgurls: [],
         articleid: [],
-        articleshow: ""
+        articleshow: "",
+        isloading: false
     },
     mutations: {
         popside(state) {
@@ -84,8 +85,36 @@ const store = new Vuex.Store({
             state.articleshow = id;
             console.log(id)
             return
+        },
+        loadingchange(state) {
+            state.isloading = !state.isloading;
+            return
         }
     }
+})
+
+//添加请求拦截器
+axios.interceptors.request.use(config => {
+    //在发送请求之前做某事，比如说 设置loading动画显示
+    store.commit('loadingchange');
+    console.log(store.state.isloading)
+    return config
+}, error => {
+    //请求错误时做些事
+    store.commit('loadingchange');
+    return Promise.reject(error)
+})
+
+//添加响应拦截器
+axios.interceptors.response.use(response => {
+    //对响应数据做些事，比如说把loading动画关掉
+    store.commit('loadingchange');
+    console.log(store.state.isloading)
+    return response
+}, error => {
+    //请求错误时做些事
+    store.commit('loadingchange');
+    return Promise.reject(error)
 })
 
 new Vue({
@@ -93,5 +122,6 @@ new Vue({
     router,
     store,
     components: { App },
-    template: '<App/>'
+    template: '<App/>',
+
 })

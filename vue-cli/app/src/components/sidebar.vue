@@ -33,6 +33,9 @@
             activatedname(name) {
                 this.$store.commit('changesider', name);
                 this.$store.commit('getthemecontent');
+                this.$router.push({
+                    path: 'index'
+                })
             }
         }
     }
