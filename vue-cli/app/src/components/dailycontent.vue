@@ -1,7 +1,10 @@
 <template>
-    <div class="content" v-if="!this.$store.state.isloading">
-        <Card class="cardcontent" v-for="(item,index) in count" :key="index"  @click.native="showarticle(getid(index))">
+<div class="content" v-if="!this.$store.state.isloading" mode="out-in">
+
+        <Card class="cardcontent" v-for="(item,index) in this.$store.state.titles" :key="index"  @click.native="showarticle(getid(index))">
+            <div class="title">
             <p v-html="gettitle(index)"></p>   
+            </div>
             <img :src="getimgurl(index)">    
             <!-- 通过拼接id来改内容，实在是不得已而为之-->
             <!-- 终于不用拼接id了！！！ -->
@@ -33,8 +36,22 @@
                         path: 'article',
                     })
                     //window.location.href = '/article';
+            },
+            handleScroll() {
+                var ifbottom = (document.documentElement.clientHeight + document.documentElement.scrollTop >= document.documentElement.scrollHeight)
+                if (ifbottom == true) {
+                    setTimeout(() => {
+                        this.$store.commit('getmorecontent');
+
+                    }, 500);
+
+
+                }
+
             }
+
         },
+
         //跨域代理没有用，为什么！！！！！！
         // created: function() { //在 then的内部不能使用Vue的实例化的this, 因为在内部 this 没有被绑定!!使用箭头函数可以和父方法共享变量
         //     axios('https://zhihu-daily.leanapp.cn/api/v1/last-stories').then(response => {
@@ -56,7 +73,13 @@
         //     })
         // }
         created: function() {
+            scrollTo(0, 0);
+
             this.$store.commit('getthemecontent');
+            window.addEventListener('scroll', this.handleScroll);
+        },
+        destroyed: function() {
+            window.removeEventListener('scroll', this.handleScroll);
         }
     }
 </script>
@@ -68,10 +91,24 @@
     
     .cardcontent {
         margin-top: 20px;
+        line-height: 50px;
+        overflow: hidden;
+        min-height: 70px;
+    }
+    
+    .title {
+        width: 60%;
+        margin: auto;
+        line-height: 20px;
+        margin-top: 10px;
+        font-size: 0.8rem;
     }
     
     img {
-        width: 100px;
+        position: absolute;
+        width: 50px;
+        right: 20px;
+        top: 10px;
     }
     
     @media screen and (min-width: 765px) {
@@ -79,5 +116,18 @@
             width: 60%;
             margin: auto;
         }
+    }
+</style>
+<style>
+    .ivu-card-body {
+        position: relative;
+        /* display: flex;
+        align-items: center; */
+        /*我要flex布局啊，之后再调吧*/
+    }
+    
+    .ivu-scroll-container::-webkit-scrollbar {
+        /*隐藏侧边栏滚动条*/
+        display: none;
     }
 </style>

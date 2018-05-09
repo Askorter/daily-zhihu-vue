@@ -37,7 +37,9 @@ const store = new Vuex.Store({
         imgurls: [],
         articleid: [],
         articleshow: "",
-        isloading: false
+        isloading: false,
+        dateshow: new Date(),
+        timelimit: true
     },
     mutations: {
         popside(state) {
@@ -49,20 +51,26 @@ const store = new Vuex.Store({
         getthemecontent(state) {
             if (state.sidebaractivated === "首页") {
                 axios('https://zhihu-daily.leanapp.cn/api/v1/last-stories').then(response => {
+                    store.commit('loadingchange');
                     state.titles = [];
                     state.imgurls = [];
                     state.articleid = [];
-                    for (let i = 0; i < 10; i++) {
+                    for (let i = 0; i < response.data.STORIES.stories.length; i++) {
                         state.titles.push(response.data.STORIES.stories[i].title);
                         state.imgurls.push(response.data.STORIES.stories[i].images.join('').replace(/(http)s?:\/\//g, 'https://images.weserv.nl/?url=')); //匹配http或https
                         state.articleid.push(response.data.STORIES.stories[i].id);
                     }
+                }).then(response => {
+                    setTimeout(() => {
+                        store.commit('loadingchange');
+                    }, 2000);
                 }).catch(response => {
                     console.log(response);
                 })
             } else {
                 var url = 'https://zhihu-daily.leanapp.cn/api/v1/themes/';
                 axios(url + state.theme[state.sidebaractivated]).then(response => {
+                    store.commit('loadingchange');
                     state.titles = [];
                     state.imgurls = [];
                     state.articleid = [];
@@ -75,11 +83,39 @@ const store = new Vuex.Store({
                             state.imgurls.push('');
                         }
                     }
+                }).then(response => {
+                    setTimeout(() => {
+                        store.commit('loadingchange');
+                    }, 2000);
+
                 }).catch(response => {
                     console.log(response);
                 })
             }
 
+        },
+        getmorecontent(state) {
+            var mydate = state.dateshow;
+            mydate = mydate.getFullYear().toString() + (mydate.getMonth() + 1).toString().padStart(2, '0') + mydate.getDate().toString().padStart(2, '0')
+            if (state.sidebaractivated === "首页" && state.timelimit === true) {
+                axios('https://zhihu-daily.leanapp.cn/api/v1/before-stories/' + mydate).then(response => {
+                    for (let i = 0; i < response.data.STORIES.stories.length; i++) {
+                        state.titles.push(response.data.STORIES.stories[i].title);
+                        state.imgurls.push(response.data.STORIES.stories[i].images.join('').replace(/(http)s?:\/\//g, 'https://images.weserv.nl/?url=')); //匹配http或https
+                        state.articleid.push(response.data.STORIES.stories[i].id);
+                    }
+                    this.commit('dateback');
+                    state.timelimit = false;
+                }).then(response => {
+                    setTimeout(() => {
+                        state.timelimit = true;
+                    }, 2000);
+                }).catch(response => {
+                    console.log(response);
+                })
+            } else {
+                return;
+            }
         },
         setarticle(state, id) {
             state.articleshow = id;
@@ -89,33 +125,45 @@ const store = new Vuex.Store({
         loadingchange(state) {
             state.isloading = !state.isloading;
             return
+        },
+        dateback(state) { //这里可能还有bug，时间可能会出错
+            state.dateshow.setDate(state.dateshow.getDate() - 1);
+            console.log(state.dateshow);
         }
     }
 })
 
-//添加请求拦截器
-axios.interceptors.request.use(config => {
-    //在发送请求之前做某事，比如说 设置loading动画显示
-    store.commit('loadingchange');
-    console.log(store.state.isloading)
-    return config
-}, error => {
-    //请求错误时做些事
-    store.commit('loadingchange');
-    return Promise.reject(error)
-})
+// //添加请求拦截器
+// axios.interceptors.request.use(config => {
+//     //在发送请求之前做某事，比如说 设置loading动画显示
+//     store.commit('loadingchange');
+//     console.log(store.state.isloading)
+//     return config
+// }, error => {
+//     //请求错误时做些事
+//     setTimeout(() => {
+//         store.commit('loadingchange');
+//     }, 500);
 
-//添加响应拦截器
-axios.interceptors.response.use(response => {
-    //对响应数据做些事，比如说把loading动画关掉
-    store.commit('loadingchange');
-    console.log(store.state.isloading)
-    return response
-}, error => {
-    //请求错误时做些事
-    store.commit('loadingchange');
-    return Promise.reject(error)
-})
+//     return Promise.reject(error)
+// })
+
+// //添加响应拦截器
+// axios.interceptors.response.use(response => {
+//     //对响应数据做些事，比如说把loading动画关掉
+//     setTimeout(() => {
+//         store.commit('loadingchange');
+//     }, 1000);
+//     console.log(store.state.isloading)
+//     return response
+// }, error => {
+//     //请求错误时做些事
+//     setTimeout(() => {
+//         store.commit('loadingchange');
+//     }, 500);
+//     //错误时停止动画
+//     return Promise.reject(error)
+// })
 
 new Vue({
     el: '#app',

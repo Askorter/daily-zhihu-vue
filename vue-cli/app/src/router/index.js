@@ -26,8 +26,6 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-    console.log(from)
-    console.log(to)
     if (from.name === null && to.name === "articlepage") {
         next({
             path: '/' //啊啊啊，终于成功跳转了啊，'index'没有用，为什么？

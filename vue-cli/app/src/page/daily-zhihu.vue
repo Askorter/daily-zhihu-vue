@@ -24,3 +24,8 @@
         }
     }
 </script>
+<style scoped>
+    .appcontainer {
+        height: 100%;
+    }
+</style>
