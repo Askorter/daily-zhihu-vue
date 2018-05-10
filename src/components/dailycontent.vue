@@ -74,10 +74,16 @@
         // }
         created: function() {
             scrollTo(0, 0);
-
             this.$store.commit('getthemecontent');
             window.addEventListener('scroll', this.handleScroll);
         },
+        // updated: function() {  //这段代码会导致浏览器崩溃，为什么？？？
+        //     this.$store.commit('loadingchange');
+        //     setTimeout(() => {
+        //         this.$store.commit('loadingchange');
+        //     }, 1000);
+
+        // },
         destroyed: function() {
             window.removeEventListener('scroll', this.handleScroll);
         }

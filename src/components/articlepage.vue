@@ -39,6 +39,11 @@
     
     .question-title {
         font-size: 2rem;
+        text-align: center;
+    }
+    
+    .question {
+        margin-top: 20px;
     }
     
     .articlec .avatar {
@@ -62,10 +67,6 @@
         text-align: left;
         font-size: 0.8rem;
         word-break: break-all;
-    }
-    
-    .question-title {
-        text-align: center;
     }
     
     .answer {

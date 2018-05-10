@@ -7,7 +7,7 @@ import articlepage from '@/components/articlepage'
 Vue.use(Router)
 
 const router = new Router({
-    mode: 'history',
+    //mode: 'history',
     routes: [{
         path: '/',
         name: 'dailyzhihu',

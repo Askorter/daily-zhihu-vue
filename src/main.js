@@ -51,7 +51,7 @@ const store = new Vuex.Store({
         getthemecontent(state) {
             if (state.sidebaractivated === "首页") {
                 axios('https://zhihu-daily.leanapp.cn/api/v1/last-stories').then(response => {
-                    store.commit('loadingchange');
+                    //store.commit('loadingchange');
                     state.titles = [];
                     state.imgurls = [];
                     state.articleid = [];
@@ -61,16 +61,16 @@ const store = new Vuex.Store({
                         state.articleid.push(response.data.STORIES.stories[i].id);
                     }
                 }).then(response => {
-                    setTimeout(() => {
-                        store.commit('loadingchange');
-                    }, 2000);
+                    // setTimeout(() => {
+                    //     store.commit('loadingchange');
+                    // }, 2000);
                 }).catch(response => {
                     console.log(response);
                 })
             } else {
                 var url = 'https://zhihu-daily.leanapp.cn/api/v1/themes/';
                 axios(url + state.theme[state.sidebaractivated]).then(response => {
-                    store.commit('loadingchange');
+                    //store.commit('loadingchange');
                     state.titles = [];
                     state.imgurls = [];
                     state.articleid = [];
@@ -84,9 +84,9 @@ const store = new Vuex.Store({
                         }
                     }
                 }).then(response => {
-                    setTimeout(() => {
-                        store.commit('loadingchange');
-                    }, 2000);
+                    // setTimeout(() => {
+                    //     store.commit('loadingchange');
+                    // }, 2000);
 
                 }).catch(response => {
                     console.log(response);
