@@ -38,7 +38,8 @@
                     //window.location.href = '/article';
             },
             handleScroll() {
-                var ifbottom = (document.documentElement.clientHeight + document.documentElement.scrollTop >= document.documentElement.scrollHeight)
+                var ifbottom = (Math.abs(document.documentElement.clientHeight + document.documentElement.scrollTop - document.documentElement.scrollHeight) < 1) //避免浮点数计算不精确问题
+
                 if (ifbottom == true) {
                     setTimeout(() => {
                         this.$store.commit('getmorecontent');
