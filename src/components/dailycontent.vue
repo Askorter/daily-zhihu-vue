@@ -3,9 +3,16 @@
 
         <Card class="cardcontent" v-for="(item,index) in this.$store.state.titles" :key="index"  @click.native="showarticle(getid(index))">
             <div class="title">
-            <p v-html="gettitle(index)"></p>   
+                <div class="title-c">
+                    <p v-html="gettitle(index)"></p>  
+                </div>
             </div>
-            <img :src="getimgurl(index)">    
+            <div class="title-img">
+                <div class="title-img-c">
+                    <img :src="getimgurl(index)">
+                </div>
+            </div>
+               
             <!-- 通过拼接id来改内容，实在是不得已而为之-->
             <!-- 终于不用拼接id了！！！ -->
         </Card>
@@ -38,9 +45,9 @@
                     //window.location.href = '/article';
             },
             handleScroll() {
-                var ifbottom = (Math.abs(document.documentElement.clientHeight + document.documentElement.scrollTop - document.documentElement.scrollHeight) < 1) //避免浮点数计算不精确问题
-
-                if (ifbottom == true) {
+                var ifbottom = Math.abs((document.documentElement.clientHeight || document.body.clientHeight) + (document.documentElement.scrollTop || document.body.scrollTop) -
+                        (document.documentElement.scrollHeight || document.body.scrollHeight)) //避免浮点数计算不精确问题
+                if (ifbottom < 1) {
                     setTimeout(() => {
                         this.$store.commit('getmorecontent');
 
@@ -98,24 +105,54 @@
     
     .cardcontent {
         margin-top: 20px;
-        line-height: 50px;
         overflow: hidden;
         min-height: 70px;
     }
     
     .title {
-        width: 60%;
-        margin: auto;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 80%;
+        height: 100%;
         line-height: 20px;
-        margin-top: 10px;
         font-size: 0.8rem;
     }
     
-    img {
+    .title-c {
+        height: 100%;
+        display: flex;
+        padding: 0 10px;
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .title-c p {
+        margin: 0 auto;
+    }
+    
+    .title-img {
         position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 20%;
+    }
+    
+    .title-img-c {
+        height: 100%;
+        display: flex;
+        border-left: 1px solid #efefef;
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .title-img-c img {
+        display: inline-block;
         width: 50px;
         right: 20px;
-        top: 10px;
+        margin: 0 auto;
+        border-radius: 5px;
     }
     
     @media screen and (min-width: 765px) {
@@ -124,10 +161,21 @@
             margin: auto;
         }
     }
+    
+    @media screen and (max-width: 765px) {
+        .cardcontent {
+            margin-top: 20px;
+            overflow: hidden;
+            min-height: 55px;
+        }
+        .title {
+            font-size: 0.5rem;
+        }
+    }
 </style>
 <style>
     .ivu-card-body {
-        position: relative;
+        height: 100%;
         /* display: flex;
         align-items: center; */
         /*我要flex布局啊，之后再调吧*/
@@ -137,4 +185,11 @@
         /*隐藏侧边栏滚动条*/
         display: none;
     }
+    /* .title-img {
+            position: absolute;
+            width: 50px;
+            right: 20px;
+            top: 50%;
+            padding-top: 25px;
+        } */
 </style>

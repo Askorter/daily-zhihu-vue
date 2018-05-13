@@ -2,7 +2,7 @@
     <div class="container">
         <div class="sidebar">
              <transition name="bar">
-            <Menu theme="dark" v-show="this.$store.state.sidepop" @on-select="activatedname">   <!-- 为什么theme前面加了':'就无效？啊！我懂了！有变量就要用v-bind，没有变量就不能用 -->
+            <Menu class="menubar" theme="dark" v-show="this.$store.state.sidepop" @on-select="activatedname">   <!-- 为什么theme前面加了':'就无效？啊！我懂了！有变量就要用v-bind，没有变量就不能用 -->
                 <MenuItem :class="{'ivu-menu-item-active':chosen,'ivu-menu-item-selected':chosen}" name="首页">首页</MenuItem>   <!--class名字为什要加单引号？？？-->
                 <MenuItem v-for="(item,index) in sidecol" :key="index+1" @click.native="change" :name="item">{{item}}</MenuItem>        <!--KEY属性必须要写-->
             </Menu>
@@ -81,5 +81,12 @@
     
     .bar-leave-active {
         margin-left: -240px;
+    }
+</style>
+<style>
+    @media screen and (max-width: 765px) {
+        .menubar {
+            width: 150px !important;
+        }
     }
 </style>
