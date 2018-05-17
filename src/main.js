@@ -39,7 +39,7 @@ const store = new Vuex.Store({
         articleshow: "",
         isloading: false,
         dateshow: new Date(),
-        timelimit: true
+        timelimit: true,
     },
     mutations: {
         popside(state) {
@@ -95,16 +95,41 @@ const store = new Vuex.Store({
 
         },
         getmorecontent(state) {
+            if (!String.prototype.padStart) //手机浏览器有的没有实现padStart这个函数，用一个别人的polyfill
+                String.prototype.padStart =
+                // 为了方便表示这里 fillString 用了ES6 的默认参数，不影响理解
+                function(maxLength, fillString = ' ') {
+                    if (Object.prototype.toString.call(fillString) !== "[object String]") throw new TypeError('fillString must be String')
+                    let str = this
+                        // 返回 String(str) 这里是为了使返回的值是字符串字面量，在控制台中更符合直觉
+                    if (str.length >= maxLength) return String(str)
+
+                    let fillLength = maxLength - str.length,
+                        times = Math.ceil(fillLength / fillString.length)
+
+                    // 这个算法叫啥？
+                    // SICP 的中文版第 30页 有用到同种算法计算乘幂计算
+                    while (times >>= 1) {
+                        fillString += fillString
+                        if (times === 1) {
+                            fillString += fillString
+                        }
+                    }
+                    return fillString.slice(0, fillLength) + str
+                }
+            this.commit('dateback');
             var mydate = state.dateshow;
-            mydate = mydate.getFullYear().toString() + (mydate.getMonth() + 1).toString().padStart(2, '0') + mydate.getDate().toString().padStart(2, '0')
+            //mydate = mydate.getFullYear().toString() + (mydate.getMonth() + 1).toString().padStart(2, '0') + mydate.getDate().toString().padStart(2, '0');
+            //上面这种写法会导致移动端某些浏览器停止执行下面的语句，why???
+            //用一个副本保存mydate就可以解决移动端上无法下拉加载更多内容的bug
+            var mydatecopy = mydate.getFullYear().toString() + (mydate.getMonth() + 1).toString().padStart(2, '0') + mydate.getDate().toString().padStart(2, '0');
             if (state.sidebaractivated === "首页" && state.timelimit === true) {
-                axios('https://zhihu-daily.leanapp.cn/api/v1/before-stories/' + mydate).then(response => {
+                axios('https://zhihu-daily.leanapp.cn/api/v1/before-stories/' + mydatecopy).then(response => {
                     for (let i = 0; i < response.data.STORIES.stories.length; i++) {
                         state.titles.push(response.data.STORIES.stories[i].title);
                         state.imgurls.push(response.data.STORIES.stories[i].images.join('').replace(/(http)s?:\/\//g, 'https://images.weserv.nl/?url=')); //匹配http或https
                         state.articleid.push(response.data.STORIES.stories[i].id);
                     }
-                    this.commit('dateback');
                     state.timelimit = false;
                 }).then(response => {
                     setTimeout(() => {
@@ -116,6 +141,7 @@ const store = new Vuex.Store({
             } else {
                 return;
             }
+
         },
         setarticle(state, id) {
             state.articleshow = id;

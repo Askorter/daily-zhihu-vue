@@ -23,6 +23,14 @@
             };
         },
         methods: {
+            loading() {
+                this.$store.commit('loadingchange');
+                setTimeout(() => {
+                    this.$store.commit('loadingchange');
+                }, 1000);
+
+            }
+            ,
             sidebarin() {
                 this.$store.commit('popside');
                 document.body.style.position = "absolute"; //当侧边栏收回时恢复body可滚动
@@ -31,6 +39,7 @@
                 this.chosen = false;
             },
             activatedname(name) {
+                this.loading();
                 this.$store.commit('changesider', name);
                 this.$store.commit('getthemecontent');
                 document.body.style.position = "fixed";
@@ -87,6 +96,14 @@
     @media screen and (max-width: 765px) {
         .menubar {
             width: 150px !important;
+        }
+        .ivu-menu-item{
+            font-size:13px;
+        }
+    }
+    @media screen and (min-width: 765px) {
+        .ivu-menu-item{
+            font-size:18px;
         }
     }
 </style>

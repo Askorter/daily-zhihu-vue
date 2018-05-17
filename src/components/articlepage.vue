@@ -33,12 +33,18 @@
     }
     
     .articlec img {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        display: block;
+        margin: auto;
         border: 1px solid rgb(143, 143, 143);
         border-radius: 1em;
+        margin-bottom:10px;
     }
     
     .articlec p {
-        padding-bottom: 10px;
+        padding-bottom: 15px;
     }
     
     .content-img,
@@ -94,7 +100,7 @@
         box-shadow: 2px 0px 5px #616161;
         background-color: rgb(252, 252, 252);
         text-align: left;
-        font-size: 0.8rem;
+        font-size: 18px;
         word-break: break-all;
     }
     
@@ -112,20 +118,33 @@
         text-align: center;
     }
     
-    .articlec img {
-        width: 100%;
-        height: auto;
-        max-width: 100%;
-        display: block;
-        margin: auto;
-    }
+    
     
     @media screen and (max-width: 765px) {
         .articlec {
-            width: 80%;
+            width: 90%;
             margin: auto;
             padding: 20px;
             text-align: left;
+            font-size: 14px;
+            line-height: 17px;
+        }
+        .question-title {
+        font-size: 17px;
+        text-align: center;
+        line-height: 25px;
+        }
+        .main-wrap .headline-title{
+            font-size:18px;
+            line-height: 20px;
+        }
+        .main-wrap h1{
+            font-size:17px;
+            line-height: 20px;
+        }
+        .main-wrap h2{
+            font-size:15px;
+            line-height: 20px;
         }
     }
 </style>

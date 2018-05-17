@@ -7,18 +7,18 @@
 <script>
     export default {
         name: 'App',
-        methods: {
-            loading() {
-                this.$store.commit('loadingchange');
-                setTimeout(() => {
-                    this.$store.commit('loadingchange');
-                }, 1000);
+        // methods: {
+        //     loading() {
+        //         this.$store.commit('loadingchange');
+        //         setTimeout(() => {
+        //             this.$store.commit('loadingchange');
+        //         }, 1000);
 
-            }
-        },
-        watch: { //修复部分动画
-            '$route': 'loading'
-        }
+        //     }
+        // },
+        // watch: { //修复部分动画
+        //     '$route': 'loading'
+        // }
 
     }
 </script>

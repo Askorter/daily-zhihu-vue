@@ -1,6 +1,5 @@
 <template>
 <div class="content" v-if="!this.$store.state.isloading" mode="out-in">
-
         <Card class="cardcontent" v-for="(item,index) in this.$store.state.titles" :key="index"  @click.native="showarticle(getid(index))">
             <div class="title">
                 <div class="title-c">
@@ -28,6 +27,13 @@
             }
         },
         methods: {
+            loading() {
+                this.$store.commit('loadingchange');
+                setTimeout(() => {
+                    this.$store.commit('loadingchange');
+                }, 1000);
+
+            },
             gettitle(i) {
                 return this.$store.state.titles[i];
             },
@@ -38,6 +44,7 @@
                 return this.$store.state.articleid[i];
             },
             showarticle(id) {
+                this.loading();              //再次修复动画，perfect
                 this.$store.commit('setarticle', id);
                 this.$router.push({
                         path: 'article',
@@ -47,13 +54,11 @@
             handleScroll() {
                 var ifbottom = Math.abs((document.documentElement.clientHeight || document.body.clientHeight) + (document.documentElement.scrollTop || document.body.scrollTop) -
                         (document.documentElement.scrollHeight || document.body.scrollHeight)) //避免浮点数计算不精确问题
-                if (ifbottom < 1) {
+                this.debugpx=ifbottom;
+                if (ifbottom < 1) {       
                     setTimeout(() => {
                         this.$store.commit('getmorecontent');
-
                     }, 500);
-
-
                 }
 
             }
@@ -102,7 +107,6 @@
         margin: auto;
         width: 80%;
     }
-    
     .cardcontent {
         margin-top: 20px;
         overflow: hidden;
@@ -116,7 +120,7 @@
         width: 80%;
         height: 100%;
         line-height: 20px;
-        font-size: 0.8rem;
+        font-size: 18px;
     }
     
     .title-c {
@@ -169,7 +173,7 @@
             min-height: 55px;
         }
         .title {
-            font-size: 0.5rem;
+            font-size: 13px;
         }
     }
 </style>

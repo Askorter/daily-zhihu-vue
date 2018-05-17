@@ -28,4 +28,11 @@
         margin-left: 20px;
         margin-top: 10px;
     }
+    @media screen and (max-width: 765px) {
+        .nav-button {
+            float: left;
+            margin-left: 14px;
+            margin-top: 10px;
+        }
+    }
 </style>
