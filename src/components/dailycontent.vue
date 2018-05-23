@@ -3,19 +3,19 @@
         <Card class="cardcontent" v-for="(item,index) in this.$store.state.titles" :key="index"  @click.native="showarticle(getid(index))">
             <div class="title">
                 <div class="title-c">
-                    <p v-html="gettitle(index)"></p>  
+                    <p v-html="gettitle(index)"></p>
                 </div>
             </div>
             <div class="title-img">
                 <div class="title-img-c">
-                    <img :src="getimgurl(index)">
+                    <img :src="getimgurl(index)" :title="gettitle(index)" :alt="gettitle(index)" :onerror="errorimg">
                 </div>
             </div>
-               
+
             <!-- 通过拼接id来改内容，实在是不得已而为之-->
             <!-- 终于不用拼接id了！！！ -->
         </Card>
-    </div> 
+    </div>
 </template>
 <script>
     import axios from 'axios';
@@ -24,6 +24,7 @@
         data() {
             return {
                 count: 10,
+                errorimg:'this.src="' + require('../assets/error.png') + '"'
             }
         },
         methods: {
@@ -55,14 +56,12 @@
                 var ifbottom = Math.abs((document.documentElement.clientHeight || document.body.clientHeight) + (document.documentElement.scrollTop || document.body.scrollTop) -
                         (document.documentElement.scrollHeight || document.body.scrollHeight)) //避免浮点数计算不精确问题
                 this.debugpx=ifbottom;
-                if (ifbottom < 1) {       
+                if (ifbottom < 1) {
                     setTimeout(() => {
                         this.$store.commit('getmorecontent');
                     }, 500);
                 }
-
             }
-
         },
 
         //跨域代理没有用，为什么！！！！！！
@@ -112,7 +111,7 @@
         overflow: hidden;
         min-height: 70px;
     }
-    
+
     .title {
         position: absolute;
         left: 0;
@@ -122,7 +121,7 @@
         line-height: 20px;
         font-size: 18px;
     }
-    
+
     .title-c {
         height: 100%;
         display: flex;
@@ -130,11 +129,11 @@
         flex-direction: row;
         align-items: center;
     }
-    
+
     .title-c p {
         margin: 0 auto;
     }
-    
+
     .title-img {
         position: absolute;
         right: 0;
@@ -142,7 +141,7 @@
         height: 100%;
         width: 20%;
     }
-    
+
     .title-img-c {
         height: 100%;
         display: flex;
@@ -150,7 +149,7 @@
         flex-direction: row;
         align-items: center;
     }
-    
+
     .title-img-c img {
         display: inline-block;
         width: 50px;
@@ -158,14 +157,14 @@
         margin: 0 auto;
         border-radius: 5px;
     }
-    
+
     @media screen and (min-width: 765px) {
         .content {
             width: 60%;
             margin: auto;
         }
     }
-    
+
     @media screen and (max-width: 765px) {
         .cardcontent {
             margin-top: 20px;
@@ -184,7 +183,7 @@
         align-items: center; */
         /*我要flex布局啊，之后再调吧*/
     }
-    
+
     .ivu-scroll-container::-webkit-scrollbar {
         /*隐藏侧边栏滚动条*/
         display: none;
