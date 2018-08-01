@@ -13,97 +13,109 @@
     </div>    
 </template>
 <script>
-    import axios from 'axios'
-    export default {
-        name: "sidebar",
-        data() {
-            return {
-                sidecol: ['日常心理学', '用户推荐日报', '电影日报', '不许无聊', '设计日报', '大公司日报', '财经日报', '互联网安全', '开始游戏', '音乐日报', '动漫日报', '体育日报'],
-                chosen: true,
-            };
-        },
-        methods: {
-            loading() {
-                this.$store.commit('loadingchange');
-                setTimeout(() => {
-                    this.$store.commit('loadingchange');
-                }, 1000);
-
-            }
-            ,
-            sidebarin() {
-                this.$store.commit('popside');
-                document.body.style.position = "absolute"; //当侧边栏收回时恢复body可滚动
-            },
-            change() {
-                this.chosen = false;
-            },
-            activatedname(name) {
-                this.loading();
-                this.$store.commit('changesider', name);
-                this.$store.commit('getthemecontent');
-                document.body.style.position = "fixed";
-                this.$router.push({
-                    path: 'index'
-                })
-            }
-        }
+import axios from "axios";
+export default {
+  name: "sidebar",
+  data() {
+    return {
+      sidecol: [
+        "日常心理学",
+        "用户推荐日报",
+        "电影日报",
+        "不许无聊",
+        "设计日报",
+        "大公司日报",
+        "财经日报",
+        "互联网安全",
+        "开始游戏",
+        "音乐日报",
+        "动漫日报",
+        "体育日报"
+      ],
+      chosen: true
+    };
+  },
+  methods: {
+    loading() {
+      this.$store.commit("loadingchange");
+      setTimeout(() => {
+        this.$store.commit("loadingchange");
+      }, 1000);
+    },
+    sidebarin() {
+      this.$store.commit("popside");
+      document.body.style.position = "absolute"; //当侧边栏收回时恢复body可滚动
+    },
+    change() {
+      this.chosen = false;
+    },
+    activatedname(name) {
+      this.loading();
+      this.$store.commit("changesider", name);
+      this.$store.commit("changeheight", 0);
+      this.$store.commit("getthemecontent");
+      document.body.style.position = "fixed";
+      this.$router.push({
+        path: "index"
+      });
     }
+  }
+};
 </script>
 <style scoped>
-    .sidebar {
-        position: absolute;
-        left: 0;
-        top: 0;
-        background-color: rgb(72, 79, 96);
-        z-index: 3;
-        height: 100%;
-        overflow: auto;
-        /*侧边栏超出滚动*/
-    }
-    
-    .sidebar::-webkit-scrollbar {
-        /*隐藏侧边栏滚动条*/
-        display: none;
-    }
-    
-    .sidebar-mask {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba(55, 55, 55, .6);
-        height: 100%;
-        z-index: 1;
-    }
-    
-    .bar-enter-active,
-    .bar-leave-active {
-        transition: all .3s;
-        /*时间要带单位啊啊！！！！*/
-    }
-    
-    .bar-enter {
-        margin-left: -240px;
-    }
-    
-    .bar-leave-active {
-        margin-left: -240px;
-    }
+.sidebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: rgb(72, 79, 96);
+  z-index: 3;
+  height: 100%;
+  overflow: auto;
+  /*侧边栏超出滚动*/
+}
+
+.sidebar::-webkit-scrollbar {
+  /*隐藏侧边栏滚动条*/
+  display: none;
+}
+
+.sidebar-mask {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(55, 55, 55, 0.6);
+  height: 100%;
+  z-index: 1;
+}
+
+.bar-enter-active,
+.bar-leave-active {
+  transition: all 0.3s;
+  /*时间要带单位啊啊！！！！*/
+}
+
+.bar-enter {
+  margin-left: -240px;
+}
+
+.bar-leave-active {
+  margin-left: -240px;
+}
 </style>
 <style>
-    @media screen and (max-width: 765px) {
-        .menubar {
-            width: 150px !important;
-        }
-        .ivu-menu-item{
-            font-size:13px;
-        }
-    }
-    @media screen and (min-width: 765px) {
-        .ivu-menu-item{
-            font-size:18px;
-        }
-    }
+@media screen and (max-width: 765px) {
+  .menubar {
+    width: 150px !important;
+  }
+  .ivu-menu-item {
+    font-size: 13px;
+  }
+}
+@media screen and (min-width: 765px) {
+  .ivu-menu-item {
+    font-size: 18px;
+  }
+}
 </style>

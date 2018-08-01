@@ -4,13 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-    <title>app</title>
+    <meta name="referrer" content="never">
+    <!-- 妙啊，通过html文档控制http头中的referer信息，删除referer信息以此绕过知乎的图片反盗链，妙啊-->
+    <title>知乎日报</title>
     <style>
         body {
             padding: 0;
             margin: 0;
         }
-        
+
         * {
             box-sizing: border-box;
         }
